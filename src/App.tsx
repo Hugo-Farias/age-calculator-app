@@ -1,7 +1,12 @@
-import "./App.css";
+import "./App.scss";
+import YearForm from "./components/YearForm";
 
 function App() {
-  return <div>test</div>;
+  return (
+    <div className="app">
+      <YearForm />
+    </div>
+  );
 }
 
 export default App;
