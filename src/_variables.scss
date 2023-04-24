@@ -1,12 +1,13 @@
 $screen-mobile: 320px;
 $screen-small: 425px;
-$sceen-tablet: 768px;
+$screen-tablet: 768px;
 $screen-laptop: 1024px;
 
 $color-primary: #854dff;
 $color-font-black: #151515;
 $color-font-gray: #716f6f;
 $color-border-gray: #dcdcdc;
+$color-invalid: #ff5959;
 
 @mixin flex-center {
   display: flex;
