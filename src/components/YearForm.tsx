@@ -6,21 +6,9 @@ import { checkInvalid } from "../helper";
 const currentYear = new Date().getFullYear();
 
 const formsList = [
-  { name: "day", min: 1, max: 31, maxLen: 2, invMsg: "Must be a valid day" },
-  {
-    name: "month",
-    min: 1,
-    max: 12,
-    maxLen: 2,
-    invMsg: "Must be a valid month",
-  },
-  {
-    name: "year",
-    min: 1,
-    max: currentYear,
-    maxLen: 4,
-    invMsg: "Must be in the past",
-  },
+  { name: "day", maxLen: 2, invMsg: "Must be a valid day" },
+  { name: "month", maxLen: 2, invMsg: "Must be a valid month" },
+  { name: "year", maxLen: 4, invMsg: "Must be in the past" },
 ];
 
 interface prop {
@@ -58,28 +46,25 @@ const YearForm = function ({ formData }: prop) {
   const handleSubmit = function (e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const target = e.target;
+    const target = e.target as HTMLFormElement;
 
-    let formValues: formData | null = { day: "", month: "", year: "" };
+    const { day, month, year } = {
+      day: target["day"].value,
+      month: target["month"].value,
+      year: target["year"].value,
+    };
 
-    formsList.forEach((value) => {
-      const name = value.name;
+    const invalidList = checkInvalid(day, month, year);
 
-      if (checkInvalid(target[name].value, value.min, value.max)) {
-        setIsInvalid((prevState) => ({ ...prevState, [name]: "invalid" }));
-        return (formValues = null);
-      }
-
-      if (!formValues) return null;
-
-      setIsInvalid((prevState) => ({ ...prevState, [name]: "" }));
-
-      formValues[name] = target[name].value;
+    invalidList.forEach((v) => {
+      setIsInvalid((prevState) => ({ ...prevState, [v]: "invalid" }));
     });
 
-    if (!formValues) return null;
+    if (invalidList.length !== 0) return null;
 
-    formData(formValues);
+    // if (!formValues) return null;
+    //
+    formData({ day: day, month: month, year: year });
   };
 
   const formsJSX = formsList.map((v, i) => {
@@ -90,8 +75,6 @@ const YearForm = function ({ formData }: prop) {
           type="text"
           id={v.name}
           name={v.name}
-          min={v.min}
-          max={v.max}
           maxLength={v.maxLen}
           value={input[v.name]}
           onChange={handleChange}

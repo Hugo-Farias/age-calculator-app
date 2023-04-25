@@ -1,9 +1,22 @@
 export const checkInvalid = function (
-  value: number,
-  min: number,
-  max: number
-): boolean {
-  return value > max || value < min;
+  day: number,
+  month: number,
+  year: number
+): string[] | [] {
+  const nDay = parseInt(day + "");
+  const nMonth = parseInt(month + "");
+  const nYear = parseInt(year + "");
+
+  const invalidFields = [];
+
+  const date = new Date(nYear, nMonth - 1, nDay);
+  const currDate = new Date();
+
+  if (year > currDate.getFullYear() || year < 1) invalidFields.push("year");
+  if (month > 12 || month < 1) invalidFields.push("month");
+  if (date.getDate() !== nDay) invalidFields.push("day");
+
+  return invalidFields;
 };
 
 export const calcDate = function (
@@ -38,4 +51,10 @@ export const calcDate = function (
   const years_passed = Number(Math.abs(+calcFormat[2]) - 1970);
 
   return { day: days_passed, month: months_passed, year: years_passed };
+};
+
+export const pluralCheck = function (a: number | "--"): "s" | "" {
+  if (a === "--") return "s";
+
+  return a + "" === "1" ? "" : "s";
 };

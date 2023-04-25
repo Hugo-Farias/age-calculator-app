@@ -1,7 +1,8 @@
 import "./Result.scss";
 import { formData } from "../App";
 import React from "react";
-import { calcDate } from "../helper";
+import { calcDate, pluralCheck } from "../helper";
+
 interface prop {
   data: formData;
 }
@@ -22,16 +23,23 @@ const Result: React.FC<prop> = function ({ data }) {
     newDate["day"] = diffDate.day + "";
   }
 
+  const dayTxt = "day" + pluralCheck(newDate.day);
+  const monthTxt = "month" + pluralCheck(newDate.month);
+  const yearTxt = "year" + pluralCheck(newDate.year);
+
   return (
     <div className="result">
       <h1>
-        <span className="number">{newDate.year}</span>years
+        <span className="number">{newDate.year}</span>
+        {yearTxt}
       </h1>
       <h1>
-        <span className="number">{newDate.month}</span>months
+        <span className="number">{newDate.month}</span>
+        {monthTxt}
       </h1>
       <h1>
-        <span className="number">{newDate.day}</span>days
+        <span className="number">{newDate.day}</span>
+        {dayTxt}
       </h1>
     </div>
   );
