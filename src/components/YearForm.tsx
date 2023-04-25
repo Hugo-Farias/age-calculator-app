@@ -4,9 +4,19 @@ import { formData } from "../typeDef";
 import { checkInvalid } from "../helper";
 
 const formsList = [
-  { name: "day", maxLen: 2, invMsg: "Must be a valid day" },
-  { name: "month", maxLen: 2, invMsg: "Must be a valid month" },
-  { name: "year", maxLen: 4, invMsg: "Must be in the past" },
+  { name: "day", maxLen: 2, invMsg: "Must be a valid day", placeHolder: "DD" },
+  {
+    name: "month",
+    maxLen: 2,
+    invMsg: "Must be a valid month",
+    placeHolder: "MM",
+  },
+  {
+    name: "year",
+    maxLen: 4,
+    invMsg: "Must be in the past",
+    placeHolder: "YYYY",
+  },
 ];
 
 interface prop {
@@ -70,6 +80,7 @@ const YearForm = function ({ formData }: prop) {
           name={v.name}
           maxLength={v.maxLen}
           value={input[v.name]}
+          placeholder={v.placeHolder}
           onChange={handleChange}
         />
         {isInvalid[v.name] ? <p className="invalid-msg">{v.invMsg}</p> : ""}
