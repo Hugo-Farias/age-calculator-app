@@ -53,7 +53,7 @@ export const calcDate = function (
   return { day: days_passed, month: months_passed, year: years_passed };
 };
 
-export const pluralCheck = function (a: number | "--"): "s" | "" {
+export const pluralCheck = function (a: string): "s" | "" {
   if (a === "--") return "s";
 
   return a + "" === "1" ? "" : "s";

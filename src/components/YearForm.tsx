@@ -1,9 +1,7 @@
 import "./YearForm.scss";
-import React, { ChangeEvent, FormEvent, InvalidEvent, useState } from "react";
-import formData from "App";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { formData } from "../typeDef";
 import { checkInvalid } from "../helper";
-
-const currentYear = new Date().getFullYear();
 
 const formsList = [
   { name: "day", maxLen: 2, invMsg: "Must be a valid day" },
@@ -22,9 +20,11 @@ const initialState = {
 };
 
 const YearForm = function ({ formData }: prop) {
-  const [input, setInput] = useState<formData>(initialState);
+  const [input, setInput] = useState<{ [key: string]: string }>(initialState);
 
-  const [isInvalid, setIsInvalid] = useState<formData>(initialState);
+  const [isInvalid, setIsInvalid] = useState<{ [key: string]: string }>(
+    initialState
+  );
 
   const handleChange = function (e: ChangeEvent<HTMLInputElement>) {
     const { value, name } = e.target;
@@ -34,13 +34,6 @@ const YearForm = function ({ formData }: prop) {
     setIsInvalid((prevState) => ({ ...prevState, [name]: "" }));
 
     setInput((prevState) => ({ ...prevState, [name]: value }));
-  };
-
-  const handleInvalid = function (e: InvalidEvent<HTMLInputElement>) {
-    e.preventDefault();
-    const { name } = e.target;
-
-    setIsInvalid((prevState) => ({ ...prevState, [name]: "invalid" }));
   };
 
   const handleSubmit = function (e: FormEvent<HTMLFormElement>) {
@@ -62,8 +55,8 @@ const YearForm = function ({ formData }: prop) {
 
     if (invalidList.length !== 0) return null;
 
-    // if (!formValues) return null;
-    //
+    setIsInvalid(initialState);
+
     formData({ day: day, month: month, year: year });
   };
 
@@ -78,7 +71,6 @@ const YearForm = function ({ formData }: prop) {
           maxLength={v.maxLen}
           value={input[v.name]}
           onChange={handleChange}
-          onInvalid={handleInvalid}
         />
         {isInvalid[v.name] ? <p className="invalid-msg">{v.invMsg}</p> : ""}
       </div>

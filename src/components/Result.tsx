@@ -1,7 +1,7 @@
 import "./Result.scss";
-import { formData } from "../App";
 import React from "react";
 import { calcDate, pluralCheck } from "../helper";
+import { formData } from "../typeDef";
 
 interface prop {
   data: formData;
@@ -13,7 +13,7 @@ const Result: React.FC<prop> = function ({ data }) {
   const newDate = { day: "--", month: "--", year: "--" };
 
   if (!isNaN(+(day + month + year))) {
-    const date: Date = new Date(+year, month - 1, +day);
+    const date: Date = new Date(+year, +month - 1, +day);
     const currDate: Date = new Date();
 
     const diffDate = calcDate(date, currDate);

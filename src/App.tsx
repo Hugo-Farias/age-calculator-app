@@ -2,12 +2,7 @@ import "./App.scss";
 import YearForm from "./components/YearForm";
 import Result from "./components/Result";
 import { useState } from "react";
-
-export interface formData {
-  day: string;
-  month: string;
-  year: string;
-}
+import { formData } from "./typeDef";
 
 function App() {
   const [data, setData] = useState<formData>({
