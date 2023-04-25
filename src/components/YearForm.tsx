@@ -1,6 +1,7 @@
 import "./YearForm.scss";
 import React, { ChangeEvent, FormEvent, InvalidEvent, useState } from "react";
 import formData from "App";
+import { checkInvalid } from "../helper";
 
 const currentYear = new Date().getFullYear();
 
@@ -16,7 +17,7 @@ const formsList = [
   {
     name: "year",
     min: 1,
-    max: currentYear - 1,
+    max: currentYear,
     maxLen: 4,
     invMsg: "Must be in the past",
   },
@@ -38,34 +39,45 @@ const YearForm = function ({ formData }: prop) {
   const [isInvalid, setIsInvalid] = useState<formData>(initialState);
 
   const handleChange = function (e: ChangeEvent<HTMLInputElement>) {
-    const target = e.target;
-    const value = e.target.value;
+    const { value, name } = e.target;
 
     if (isNaN(+value)) return;
 
-    setInput((prevState) => ({ ...prevState, [target.name]: value }));
+    setIsInvalid((prevState) => ({ ...prevState, [name]: "" }));
+
+    setInput((prevState) => ({ ...prevState, [name]: value }));
   };
 
   const handleInvalid = function (e: InvalidEvent<HTMLInputElement>) {
     e.preventDefault();
-    const name = e.target.name;
+    const { name } = e.target;
 
     setIsInvalid((prevState) => ({ ...prevState, [name]: "invalid" }));
   };
 
   const handleSubmit = function (e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const target = e.target;
-    // const name = e.target.name;
-    // console.log(name);
 
-    const formValues: formData = { day: "", month: "", year: "" };
+    const target = e.target;
+
+    let formValues: formData | null = { day: "", month: "", year: "" };
 
     formsList.forEach((value) => {
-      formValues[value] = target[value].value;
+      const name = value.name;
+
+      if (checkInvalid(target[name].value, value.min, value.max)) {
+        setIsInvalid((prevState) => ({ ...prevState, [name]: "invalid" }));
+        return (formValues = null);
+      }
+
+      if (!formValues) return null;
+
+      setIsInvalid((prevState) => ({ ...prevState, [name]: "" }));
+
+      formValues[name] = target[name].value;
     });
 
-    // setIsInvalid((prevState) => ({ ...prevState, [name]: "" }));
+    if (!formValues) return null;
 
     formData(formValues);
   };
@@ -84,7 +96,6 @@ const YearForm = function ({ formData }: prop) {
           value={input[v.name]}
           onChange={handleChange}
           onInvalid={handleInvalid}
-          required
         />
         {isInvalid[v.name] ? <p className="invalid-msg">{v.invMsg}</p> : ""}
       </div>
