@@ -14,6 +14,10 @@
       justify-content: flex-start;
       gap: 1.6rem;
 
+      @media (min-width: $screen-tablet) {
+        gap: 3.2rem;
+      }
+
       .label-input {
         @include flex-center;
         flex-direction: column;
